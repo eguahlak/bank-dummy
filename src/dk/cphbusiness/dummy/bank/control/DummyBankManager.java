@@ -78,5 +78,10 @@ public class DummyBankManager implements BankManager {
   public Collection<CustomerSummary> listCustomers() {
     return createCustomerSummaries(Person.list());
     }
+
+  @Override
+  public Collection<AccountSummary> listAccounts() {
+    return createAccountSummaries(Account.list());
+    }
   
   }
