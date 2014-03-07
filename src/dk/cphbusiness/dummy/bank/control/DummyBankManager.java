@@ -4,10 +4,14 @@ import dk.cphbusiness.bank.contract.BankManager;
 import dk.cphbusiness.bank.contract.dto.AccountDetail;
 import dk.cphbusiness.bank.contract.dto.AccountIdentifier;
 import dk.cphbusiness.bank.contract.dto.AccountSummary;
+import dk.cphbusiness.bank.contract.dto.CustomerDetail;
 import dk.cphbusiness.bank.contract.dto.CustomerIdentifier;
 import dk.cphbusiness.bank.contract.dto.CustomerSummary;
+import dk.cphbusiness.bank.contract.eto.CustomerBannedException;
+import dk.cphbusiness.bank.contract.eto.ExistingCustomerException;
 import dk.cphbusiness.bank.contract.eto.InsufficientFundsException;
 import dk.cphbusiness.bank.contract.eto.NoSuchAccountException;
+import dk.cphbusiness.bank.contract.eto.NoSuchCustomerException;
 import dk.cphbusiness.bank.contract.eto.TransferNotAcceptedException;
 import dk.cphbusiness.dummy.bank.model.Account;
 import dk.cphbusiness.dummy.bank.model.Person;
@@ -83,5 +87,15 @@ public class DummyBankManager implements BankManager {
   public Collection<AccountSummary> listAccounts() {
     return createAccountSummaries(Account.list());
     }
+
+  @Override
+  public CustomerDetail saveCustomer(CustomerDetail customer) throws ExistingCustomerException {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
+
+  @Override
+  public AccountDetail createAccount(CustomerIdentifier customer, AccountDetail account) throws NoSuchCustomerException, CustomerBannedException {
+    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+  }
   
   }

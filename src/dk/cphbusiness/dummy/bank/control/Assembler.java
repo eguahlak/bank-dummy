@@ -2,6 +2,7 @@ package dk.cphbusiness.dummy.bank.control;
 
 import dk.cphbusiness.bank.contract.dto.AccountDetail;
 import dk.cphbusiness.bank.contract.dto.AccountSummary;
+import dk.cphbusiness.bank.contract.dto.CheckingAccountDetail;
 import dk.cphbusiness.bank.contract.dto.CustomerSummary;
 import dk.cphbusiness.bank.contract.dto.TransferSummary;
 import dk.cphbusiness.dummy.bank.model.Account;
@@ -72,7 +73,7 @@ public class Assembler {
     System.err.println("Transfers for #"+account.getNumber()+" "+transfers.size());
     Collection<TransferSummary> transferSummaries = new ArrayList<>();
     for (Transfer transfer : transfers) transferSummaries.add(createTransferSummary(account, transfer));
-    return new AccountDetail(account.getNumber(), "Checking Account", account.getInterest(), transferSummaries);
+    return new CheckingAccountDetail(account.getNumber(), account.getInterest(), transferSummaries);
     }
   
   }
