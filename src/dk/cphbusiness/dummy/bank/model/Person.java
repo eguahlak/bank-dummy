@@ -9,6 +9,7 @@ public class Person {
   private static final Map<String, Person> items = new HashMap<>();
   
   private final String cpr;
+  private String title;
   private String firstName;
   private String lastName;
   private String street;
@@ -27,6 +28,7 @@ public class Person {
     }
 
   public Person(String cpr,
+      String title,
       String firstName,
       String lastName,
       String street,
@@ -37,7 +39,7 @@ public class Person {
       ) {
     this.cpr = cpr;
     this.firstName = firstName;
-    this.firstName = firstName;
+    this.lastName = lastName;
     this.street = street;
     this.postalCode = postalCode;
     this.postalDistrict = postalDistrict;
@@ -48,6 +50,14 @@ public class Person {
 
   public String getCpr() {
     return cpr;
+    }
+
+  public String getTitle() {
+    return title;
+    }
+
+  public void setTitle(String title) {
+    this.title = title;
     }
 
   public String getFirstName() {

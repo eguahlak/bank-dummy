@@ -6,7 +6,7 @@ import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
-public class Account {
+public abstract class Account {
   private static final Map<String, Account> items = new HashMap<>();
   private static long nextId = 1000;
   
@@ -14,6 +14,7 @@ public class Account {
   private BigDecimal interest;
   private Collection<Transfer> outgoing = new ArrayList<Transfer>();
   private Collection<Transfer> incoming = new ArrayList<Transfer>();
+  private final Person customer;
   
   public static Collection<Account> list() {
     return items.values();
@@ -23,9 +24,11 @@ public class Account {
     return items.get(number);
     }
 
-  public Account(BigDecimal interest) {
+  public Account(Person customer, BigDecimal interest) {
     this.number = "4711-"+(nextId++);
     this.interest = interest;
+    this.customer = customer;
+    customer.getOwnedAccounts().add(this);
     items.put(this.number, this);
     }
 

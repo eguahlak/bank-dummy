@@ -3,9 +3,11 @@ package dk.cphbusiness.dummy.bank.control;
 import dk.cphbusiness.bank.contract.dto.AccountDetail;
 import dk.cphbusiness.bank.contract.dto.AccountSummary;
 import dk.cphbusiness.bank.contract.dto.CheckingAccountDetail;
+import dk.cphbusiness.bank.contract.dto.CustomerDetail;
 import dk.cphbusiness.bank.contract.dto.CustomerSummary;
 import dk.cphbusiness.bank.contract.dto.TransferSummary;
 import dk.cphbusiness.dummy.bank.model.Account;
+import dk.cphbusiness.dummy.bank.model.CheckingAccount;
 import dk.cphbusiness.dummy.bank.model.Person;
 import dk.cphbusiness.dummy.bank.model.Transfer;
 import java.math.BigDecimal;
@@ -74,6 +76,38 @@ public class Assembler {
     Collection<TransferSummary> transferSummaries = new ArrayList<>();
     for (Transfer transfer : transfers) transferSummaries.add(createTransferSummary(account, transfer));
     return new CheckingAccountDetail(account.getNumber(), account.getInterest(), transferSummaries);
+    }
+  
+  public static CustomerDetail createCustomerDetail(Person customer) {
+    return new CustomerDetail(
+        customer.getCpr(),
+        customer.getTitle(),
+        customer.getFirstName(),
+        customer.getLastName(),
+        customer.getStreet(),
+        customer.getPostalCode(),
+        customer.getPostalDistrict(),
+        customer.getPhone(),
+        customer.getEmail()
+        );
+    }
+  
+  public static Person createCustomerEntity(CustomerDetail detail) {
+    return new Person(
+        detail.getCpr(),
+        detail.getTitle(),
+        detail.getFirstName(),
+        detail.getLastName(),
+        detail.getStreet(),
+        detail.getPostalCode(),
+        detail.getPostalDistrict(),
+        detail.getPhone(),
+        detail.getEmail()
+        );
+    }
+  
+  public static CheckingAccount createCheckingAccountEntity(Person customer, CheckingAccountDetail detail) {
+    return new CheckingAccount(customer, detail.getInterest());
     }
   
   }

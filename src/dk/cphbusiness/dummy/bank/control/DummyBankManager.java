@@ -4,11 +4,11 @@ import dk.cphbusiness.bank.contract.BankManager;
 import dk.cphbusiness.bank.contract.dto.AccountDetail;
 import dk.cphbusiness.bank.contract.dto.AccountIdentifier;
 import dk.cphbusiness.bank.contract.dto.AccountSummary;
+import dk.cphbusiness.bank.contract.dto.CheckingAccountDetail;
 import dk.cphbusiness.bank.contract.dto.CustomerDetail;
 import dk.cphbusiness.bank.contract.dto.CustomerIdentifier;
 import dk.cphbusiness.bank.contract.dto.CustomerSummary;
 import dk.cphbusiness.bank.contract.eto.CustomerBannedException;
-import dk.cphbusiness.bank.contract.eto.ExistingCustomerException;
 import dk.cphbusiness.bank.contract.eto.InsufficientFundsException;
 import dk.cphbusiness.bank.contract.eto.NoSuchAccountException;
 import dk.cphbusiness.bank.contract.eto.NoSuchCustomerException;
@@ -18,6 +18,7 @@ import dk.cphbusiness.dummy.bank.model.Person;
 import java.math.BigDecimal;
 import java.util.Collection;
 import static dk.cphbusiness.dummy.bank.control.Assembler.*;
+import dk.cphbusiness.dummy.bank.model.CheckingAccount;
 import dk.cphbusiness.dummy.bank.model.Transfer;
 import java.util.Date;
 
@@ -25,32 +26,27 @@ public class DummyBankManager implements BankManager {
 
   public DummyBankManager() {
     Person kurt = new Person(
-        "121256-0555", "Kurt", "Hansen",
+        "121256-0555", "Hr.", "Kurt", "Hansen",
         "Solvej 8", "4550", "Greve", "12345467", "kurt@mail.dk"
         );
     Person sonja = new Person(
-        "111190-0444", "Sonja", "Jensen",
+        "111190-0444", "Fr.", "Sonja", "Jensen",
         "Månegade 8", "7777", "Baron", "76543210", "sonja@mail.dk"
         );
     Person james = new Person(
-        "010256-0777", "James", "Bond",
+        "010256-0777", "Hr.", "James", "Bond",
         "Mars allé 17", "7007", "Ølstykke", "20007007", "james@bond.dk"
         );
     
-    Account kurt1 = new Account(new BigDecimal(0.08));
-    Account kurt2 = new Account(new BigDecimal(0.025));
-    kurt.getOwnedAccounts().add(kurt1);
-    kurt.getOwnedAccounts().add(kurt2);
-    kurt.getOwnedAccounts().add(new Account(new BigDecimal(0.035)));
-    kurt.getOwnedAccounts().add(new Account(new BigDecimal(0.026)));
+    Account kurt1 = new CheckingAccount(kurt, new BigDecimal(0.08));
+    Account kurt2 = new CheckingAccount(kurt, new BigDecimal(0.025));
+    new CheckingAccount(kurt, new BigDecimal(0.035));
+    new CheckingAccount(kurt, new BigDecimal(0.026));
     
-    Account sonja1 = new Account(new BigDecimal(0.1));
-    Account sonja2 = new Account(new BigDecimal(0.01));
-    sonja.getOwnedAccounts().add(sonja1);
-    sonja.getOwnedAccounts().add(sonja2);
+    Account sonja1 = new CheckingAccount(sonja, new BigDecimal(0.1));
+    Account sonja2 = new CheckingAccount(sonja, new BigDecimal(0.01));
     
-    Account james1 = new Account(new BigDecimal(0.25));
-    james.getOwnedAccounts().add(james1);
+    Account james1 = new CheckingAccount(james, new BigDecimal(0.25));
     
     new Transfer(new BigDecimal(10000), "From Kurt to James", new Date(), kurt1, james1);
     new Transfer(new BigDecimal(12345), "From Sonja to James", new Date(), sonja1, james1);
@@ -89,13 +85,27 @@ public class DummyBankManager implements BankManager {
     }
 
   @Override
-  public CustomerDetail saveCustomer(CustomerDetail customer) throws ExistingCustomerException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+  public CustomerDetail saveCustomer(CustomerDetail customer) {
+    Person person = createCustomerEntity(customer);
+    return createCustomerDetail(person);
+    }
 
   @Override
-  public AccountDetail createAccount(CustomerIdentifier customer, AccountDetail account) throws NoSuchCustomerException, CustomerBannedException {
-    throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-  }
+  public AccountDetail createAccount(CustomerIdentifier customerId, AccountDetail detail) throws NoSuchCustomerException, CustomerBannedException {
+    Person owner = Person.find(customerId.getCpr());
+    if (owner == null) throw new NoSuchCustomerException(customerId);
+    if (detail instanceof CheckingAccountDetail) {
+      CheckingAccount account = createCheckingAccountEntity(owner, (CheckingAccountDetail)detail);
+      return createAccountDetail(account);
+      }
+    throw new RuntimeException("Unknown Account type");
+    }
+
+  @Override
+  public CustomerDetail showCustomer(CustomerIdentifier customer) throws NoSuchCustomerException {
+    Person person = Person.find(customer.getCpr());
+    if (person == null) throw new NoSuchCustomerException(customer);
+    return createCustomerDetail(person);
+    }
   
   }
