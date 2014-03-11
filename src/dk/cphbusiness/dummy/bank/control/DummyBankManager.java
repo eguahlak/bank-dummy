@@ -20,11 +20,18 @@ import java.util.Collection;
 import static dk.cphbusiness.dummy.bank.control.Assembler.*;
 import dk.cphbusiness.dummy.bank.model.CheckingAccount;
 import dk.cphbusiness.dummy.bank.model.Transfer;
+import java.util.ArrayList;
 import java.util.Date;
 
 public class DummyBankManager implements BankManager {
+  private Collection<String> accountTypes;
 
   public DummyBankManager() {
+    accountTypes = new ArrayList<>();
+    accountTypes.add("Checking Account");
+    accountTypes.add("Money Market Account");
+    accountTypes.add("Time Deposit Account");
+    
     Person kurt = new Person(
         "121256-0555", "Hr.", "Kurt", "Hansen",
         "Solvej 8", "4550", "Greve", "12345467", "kurt@mail.dk"
@@ -106,6 +113,11 @@ public class DummyBankManager implements BankManager {
     Person person = Person.find(customer.getCpr());
     if (person == null) throw new NoSuchCustomerException(customer);
     return createCustomerDetail(person);
+    }
+
+  @Override
+  public Collection<String> listAccountTypes() {
+    return accountTypes;
     }
   
   }
