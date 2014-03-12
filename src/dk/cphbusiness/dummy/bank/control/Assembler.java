@@ -93,17 +93,33 @@ public class Assembler {
     }
   
   public static Person createCustomerEntity(CustomerDetail detail) {
-    return new Person(
-        detail.getCpr(),
-        detail.getTitle(),
-        detail.getFirstName(),
-        detail.getLastName(),
-        detail.getStreet(),
-        detail.getPostalCode(),
-        detail.getPostalDistrict(),
-        detail.getPhone(),
-        detail.getEmail()
-        );
+    Person person = Person.find(detail.getCpr());
+    if (person == null) { 
+      return new Person(
+          detail.getCpr(),
+          detail.getTitle(),
+          detail.getFirstName(),
+          detail.getLastName(),
+          detail.getStreet(),
+          detail.getPostalCode(),
+          detail.getPostalDistrict(),
+          detail.getPhone(),
+          detail.getEmail()
+          );
+      }
+    else {
+      person.set(
+          detail.getTitle(),
+          detail.getFirstName(),
+          detail.getLastName(),
+          detail.getStreet(),
+          detail.getPostalCode(),
+          detail.getPostalDistrict(),
+          detail.getPhone(),
+          detail.getEmail()
+          );
+      return person;
+      }
     }
   
   public static CheckingAccount createCheckingAccountEntity(Person customer, CheckingAccountDetail detail) {

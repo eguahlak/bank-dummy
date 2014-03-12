@@ -48,6 +48,25 @@ public class Person {
     items.put(cpr, this);
     }
 
+  public void set(
+      String title,
+      String firstName,
+      String lastName,
+      String street,
+      String postalCode,
+      String postalDistrict,
+      String phone,
+      String email
+      ) {
+    this.firstName = firstName;
+    this.lastName = lastName;
+    this.street = street;
+    this.postalCode = postalCode;
+    this.postalDistrict = postalDistrict;
+    this.phone = phone;
+    this.email = email;
+    }
+  
   public String getCpr() {
     return cpr;
     }
