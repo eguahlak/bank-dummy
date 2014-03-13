@@ -62,6 +62,11 @@ public class DummyBankManager implements BankManager {
     }
 
   @Override
+  public String sayHello(String name) {
+    return "Hello "+name+" from dummy bank manager";
+    }
+  
+  @Override
   public Collection<AccountSummary> listCustomerAccounts(CustomerIdentifier identifier) {
     Person customer = Person.find(identifier.getCpr());
     if (customer == null) return createAccountSummaries(null);
